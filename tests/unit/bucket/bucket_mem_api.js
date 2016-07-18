@@ -110,15 +110,23 @@ describe('bucket API for getting a subset of objects from a bucket', () => {
     it('should return individual key if key does not contain ' +
        'the delimiter even if key contains prefix', done => {
         async.waterfall([
-            next =>
-                metadata.putObjectMD(bucketName, 'key1', '{}', log, next),
-            next =>
-                metadata.putObjectMD(bucketName, 'noMatchKey', '{}', log, next),
-            next =>
-                metadata.putObjectMD(bucketName, 'key1/', '{}', log, next),
-            next =>
+            next => {
+                console.log("type of the damn next function is", typeof next);
+                metadata.putObjectMD(bucketName, 'key1', '{}', log, next);
+            },
+            (data, next) => {
+                console.log("type of the damn next function is", typeof next);
+                metadata.putObjectMD(bucketName, 'noMatchKey', '{}', log, next);
+            },
+            (data, next) => {
+                console.log("type of the damn next function is", typeof next);
+                metadata.putObjectMD(bucketName, 'key1/', '{}', log, next);
+            },
+            (data, next) => {
+                console.log("type of the damn next function is", typeof next);
                 metadata.listObject(bucketName, 'key', null, delimiter,
-                    defaultLimit, log, next),
+                    defaultLimit, log, next);
+            },
         ], (err, response) => {
             assert.strictEqual(isKeyInContents(response, 'key1'), true);
             assert.strictEqual(response.CommonPrefixes.indexOf('key1'), -1);
@@ -136,11 +144,11 @@ describe('bucket API for getting a subset of objects from a bucket', () => {
         async.waterfall([
             next =>
                 metadata.putObjectMD(bucketName, 'key/one', '{}', log, next),
-            next =>
+            (data, next) =>
                 metadata.putObjectMD(bucketName, 'key/two', '{}', log, next),
-            next =>
+            (data, next) =>
                 metadata.putObjectMD(bucketName, 'key/three', '{}', log, next),
-            next =>
+            (data, next) =>
                 metadata.listObject(bucketName, 'ke', null, delimiter,
                                     defaultLimit, log, next),
         ], (err, response) => {
@@ -214,12 +222,12 @@ describe('bucket API for getting a subset of objects from a bucket', () => {
         async.waterfall([
             next =>
                 metadata.putObjectMD(bucketName, 'next/', '{}', log, next),
-            next =>
+            (data, next) =>
                 metadata.putObjectMD(bucketName, 'next/rollUp', '{}', log,
                     next),
-            next =>
+            (data, next) =>
                 metadata.putObjectMD(bucketName, 'next1/', '{}', log, next),
-            next =>
+            (data, next) =>
                 metadata.listObject(bucketName, 'next', null, delimiter,
                                     smallLimit, log, next),
         ], (err, response) => {
