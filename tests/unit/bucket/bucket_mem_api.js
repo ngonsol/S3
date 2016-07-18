@@ -110,23 +110,15 @@ describe('bucket API for getting a subset of objects from a bucket', () => {
     it('should return individual key if key does not contain ' +
        'the delimiter even if key contains prefix', done => {
         async.waterfall([
-            next => {
-                console.log("type of the damn next function is", typeof next);
-                metadata.putObjectMD(bucketName, 'key1', '{}', log, next);
-            },
-            (data, next) => {
-                console.log("type of the damn next function is", typeof next);
-                metadata.putObjectMD(bucketName, 'noMatchKey', '{}', log, next);
-            },
-            (data, next) => {
-                console.log("type of the damn next function is", typeof next);
-                metadata.putObjectMD(bucketName, 'key1/', '{}', log, next);
-            },
-            (data, next) => {
-                console.log("type of the damn next function is", typeof next);
+            next =>
+                metadata.putObjectMD(bucketName, 'key1', '{}', log, next),
+            (data, next) =>
+                metadata.putObjectMD(bucketName, 'noMatchKey', '{}', log, next),
+            (data, next) =>
+                metadata.putObjectMD(bucketName, 'key1/', '{}', log, next),
+            (data, next) =>
                 metadata.listObject(bucketName, 'key', null, delimiter,
-                    defaultLimit, log, next);
-            },
+                    defaultLimit, log, next),
         ], (err, response) => {
             assert.strictEqual(isKeyInContents(response, 'key1'), true);
             assert.strictEqual(response.CommonPrefixes.indexOf('key1'), -1);

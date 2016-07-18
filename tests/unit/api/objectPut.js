@@ -204,7 +204,7 @@ describe('objectPut API', () => {
     /**
      * now overwriting an object in versioning means adding a new version, thus
      * old data will node be deleted just be overwriting an existing object
-     * 
+     *
     it('should not leave orphans in data when overwriting an object', done => {
         const testPutObjectRequest2 = new DummyRequest({
             bucketName,
